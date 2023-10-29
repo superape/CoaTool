@@ -65,12 +65,10 @@ def trade_tool(keyboard_controller, item_name):
     mouse_click(2034, 274)
     time.sleep(0.01)
     keyboard_controller.type(item_name)
-    time.sleep(0.2)
-    # mouse_click(1958, 312)
     keyboard_controller.press('1')
     keyboard_controller.release('1')
-    time.sleep(0.2)
 
+    time.sleep(0.3)
     # 点击商品名
     mouse_click(2034, 362)
 
@@ -87,8 +85,7 @@ def trade_tool(keyboard_controller, item_name):
     keyboard_controller.press(Key.esc)
     keyboard_controller.release(Key.esc)
 
-
-# Press the green button in the gutter to run the script.
+# Press the green button in the gutter to run the script.1
 if __name__ == '__main__':
     # seria = win32gui.FindWindow(None, "Seria")kelao1kelao1kelao1kelao1
 
@@ -106,9 +103,11 @@ if __name__ == '__main__':
     # trade_tool(keyboard_controller, 'kelao')
 
     index = 1
-    while index <= 10: #test
-    #while 1:
+    #while index <= 10: #test
+    while 1:
         trade_tool(keyboard_controller, 'monv')
+        time.sleep(0.1)
+        trade_tool(keyboard_controller, 'gangtie')
         time.sleep(0.1)
         print(index)
         index = index + 1
