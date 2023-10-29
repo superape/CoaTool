@@ -1,7 +1,7 @@
 PyMouse==1.0
 PySocks==1.7.1
 PyUserInput==0.1.10
-pynpu==1.7.6
+pynput==1.7.6
 pywin32==305
 win32core==221.36
 win32gui==221.6
