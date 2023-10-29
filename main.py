@@ -1,12 +1,7 @@
-import os
 import time
-import win32gui
 import win32api
 import win32con
-import pymouse, pykeyboard
-from pymouse import *
 from ctypes import *
-from pynput import keyboard
 from pynput.keyboard import Key, Controller
 
 is_quite = 0
@@ -81,9 +76,9 @@ def trade_tool(keyboard_controller, item_name):
     mouse_click(1278, 900)
 
     # test
-    time.sleep(0.1)
-    keyboard_controller.press(Key.esc)
-    keyboard_controller.release(Key.esc)
+    # time.sleep(0.1)
+    # keyboard_controller.press(Key.esc)
+    # keyboard_controller.release(Key.esc)
 
 # Press the green button in the gutter to run the script.1
 if __name__ == '__main__':
@@ -105,9 +100,7 @@ if __name__ == '__main__':
     index = 1
     #while index <= 10: #test
     while 1:
-        trade_tool(keyboard_controller, 'monv')
-        time.sleep(0.1)
-        trade_tool(keyboard_controller, 'gangtie')
+        trade_tool(keyboard_controller, 'kelao')
         time.sleep(0.1)
         print(index)
         index = index + 1
