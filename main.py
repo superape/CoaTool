@@ -1,47 +1,41 @@
 import time
 import win32api
 import win32con
+import pyperclip
 from ctypes import *
-from pynput.keyboard import Key, Controller
+from pynput import keyboard
+from threading import Thread
 
-is_quite = 0
+is_quite = False
+
 
 # This is a sample Python script.
 
 # Press Ctrl+F5 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-# def on_press(key):
-#     try:
-#         print('字母键： {} 被按下'.format(key.char))
-#     except AttributeError:
-#         print('特殊键： {} 被按下'.format(key))
-#
-#
-# def on_release(key):
-#     print('{} 释放了'.format(key))
-#     if key == keyboard.Key.esc:
-#         # 释放了esc 键，停止监听
-#         return False
-#
-#
-# def on_keyboard_event():
-#     with keyboard.Events() as events:
-#         for event in events:
-#
-#             # 监听esc键，释放esc键，停止监听。
-#             if event.key == keyboard.Key.esc:
-#                 print('接收到事件 {}, 停止监听'.format(event))
-#                 break
-#             else:
-#                 if isinstance(event, keyboard.Events.Press):
-#                     print('按下按键 {} '.format(event))
-#                 elif isinstance(event, keyboard.Events.Release):
-#                     print('松开按键 {}'.format(event))
+
+def listen():  # 键盘监听函数
+    print("listening")
+
+    def on_press(key):
+        global is_quite_global
+        if key == keyboard.Key.f1:
+            is_quite_global = True
+
+    def on_release(key):
+        global is_quite_global
+
+    with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+        listener.join()
 
 
-def on_press_a():
-    is_quite = 1
+class ListenThread(Thread):  # 截屏监听线程
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        listen()
 
 
 def mouse_click(x, y, interval):
@@ -59,12 +53,13 @@ def trade_tool(keyboard_controller, item_name):
     # 输入商品名
     mouse_click(2150, 274, 0)
     time.sleep(0.01)
-    keyboard_controller.type(item_name)
-    time.sleep(0.1)
-    keyboard_controller.press('1')
-    keyboard_controller.release('1')
+    pyperclip.copy(item_name)
+    keyboard_controller.press(keyboard.Key.ctrl_l)
+    keyboard_controller.press('v')
+    keyboard_controller.release('v')
+    keyboard_controller.release(keyboard.Key.ctrl_l)
 
-    time.sleep(0.3) #这里必须0.3s
+    time.sleep(0.2)
     # 点击商品名
     mouse_click(2026, 360, 0)
 
@@ -79,33 +74,66 @@ def trade_tool(keyboard_controller, item_name):
     time.sleep(0.1)
 
     # test
-    keyboard_controller.press(Key.esc)
-    keyboard_controller.release(Key.esc)
+    # keyboard_controller.press(keyboard.Key.esc)
+    # keyboard_controller.release(keyboard.Key.esc)
+
+
+def trade_tool_full_screen(keyboard_controller, item_name):
+    # 输入商品名
+    mouse_click(2300, 150, 0)
+    time.sleep(0.01)
+    pyperclip.copy(item_name)
+    keyboard_controller.press(keyboard.Key.ctrl_l)
+    keyboard_controller.press('v')
+    keyboard_controller.release('v')
+    keyboard_controller.release(keyboard.Key.ctrl_l)
+
+    time.sleep(0.2)
+    # 点击商品名
+    mouse_click(2296, 240, 0)
+
+    time.sleep(0.2)
+    # 点击商品
+    mouse_click(1046, 422, 0)
+
+    time.sleep(0.1)
+    # 点击购买
+    mouse_click(1300, 992, 0)
+
+    time.sleep(0.1)
+
+    # test
+    keyboard_controller.press(keyboard.Key.esc)
+    keyboard_controller.release(keyboard.Key.esc)
+
 
 # Press the green button in the gutter to run the script.1
 if __name__ == '__main__':
+    global is_quite_global
+    is_quite_global = False
+
     # seria = win32gui.FindWindow(None, "Seria")kelao1kelao1kelao1kelao1
 
     # 定义一个键盘对象
-    keyboard_controller = Controller()
+    keyboard_controller = keyboard.Controller()
 
-    # listener111 = keyboard.Listener(
-    #     on_press=on_press,
-    #     on_release=on_release)
-    # listener111.join()
-
-    # keyboard.listen('a', on_press=on_press_a)
+    # 创建退出键监听线程
+    listenThread = ListenThread()
+    listenThread.start()
 
     # test
-    # trade_tool(keyboard_controller, 'kelao')
+    # trade_tool(keyboard_controller, '克劳')
 
     index = 1
-    while index <= 100: #test
-    #while 1:
-        trade_tool(keyboard_controller, 'monv')
+    # while index <= 10: #test
+    while not is_quite_global:
+        trade_tool_full_screen(keyboard_controller, '魔女')
         time.sleep(0.1)
-        # trade_tool(keyboard_controller, 'gangtie')
+
+        # test
+        # trade_tool(keyboard_controller, '钢铁')
         # time.sleep(0.1)
+
         print(index)
         index = index + 1
 
